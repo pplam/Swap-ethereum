@@ -7,3 +7,6 @@
 [submodule "lib/ds-auth"]
 	path = lib/ds-auth
 	url = https://github.com/dapphub/ds-auth
+[submodule "lib/atn-contracts"]
+	path = lib/atn-contracts
+	url = https://github.com/ATNIO/atn-contracts
