@@ -5,7 +5,7 @@ ETH_FROM=`cat ~/.dapp/testnet/2000/config/account`
 all: clean install-deps build deploy
 
 install-deps:
-	dapp install ds-guard
+	dapp install ds-auth
 
 build: clean
 	dapp build
