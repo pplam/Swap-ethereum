@@ -8,7 +8,7 @@ contract SwapTest is DSTest {
     Swap swap;
 
     function setUp() public {
-        swap = new Swap();
+        // swap = new Swap("ethereum", address(0x90f9488adea4282ef2f56f5337c8343f774abd0f0), 1);
     }
 
     function testFail_basic_sanity() public {
