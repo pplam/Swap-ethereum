@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+
+const fs = require('fs')
+const Web3 = require('web3')
+const config = require('./config')
+
+const [
+  from,
+  toChain,
+  toAddress,
+  amount,
+  gas
+] = process.argv[2].split(',')
+
+if (!amount) {
+  console.log("Usage:\n\tswap 'from,toChain,toAddress,amount[,gas]'")
+  process.exit(1)
+}
+
+const data = string2bytes32(toChain) + toAddress.substring(2)
+
+const atnAbiFile = '../out/ATN.abi'
+const atnAbiJson = fs.readFileSync(atnAbiFile)
+const atnAbi = JSON.parse(atnAbiJson)
+
+const swapAbiFile = '../out/Swap.abi'
+const swapAbiJson = fs.readFileSync(swapAbiFile)
+const swapAbi = JSON.parse(swapAbiJson)
+
+const provider = new Web3.providers.HttpProvider(config.endpoint)
+const web3 = new Web3(provider)
+
+const atn = new web3.eth.Contract(atnAbi, config.ATN, {
+  from,
+  gas: gas || 470000
+})
+const swap = new web3.eth.Contract(swapAbi, config.SWAP, {
+  from,
+  gas: gas || 470000
+})
+
+atn.methods.transfer(config.SWAP, amount, data)
+  .send().then((res) => {
+    console.log(res)
+    swap.events.allEvents(console.log)
+  })
+
+
+function string2bytes32(str) {
+  const hex = Buffer.from(str).toString('hex')
+  const pad = Array(65 - hex.length).join('0')
+  return `0x${pad}${hex}`
+}

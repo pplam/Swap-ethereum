@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+const str = process.argv[2]
+const hex = Buffer.from(str).toString('hex')
+const sig = require('js-sha3').keccak256(str)
+const res = `0x${sig}`
+process.stdout.write(res.substring(0,10))

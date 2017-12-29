@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+const str = process.argv[2]
+const hex = Buffer.from(str).toString('hex')
+const pad = Array(65 - hex.length).join('0')
+const res = `${pad}${hex}`
+process.stdout.write(res)
