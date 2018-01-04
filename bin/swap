@@ -4,18 +4,18 @@ const fs = require('fs')
 const Web3 = require('web3')
 const config = require('./config')
 
+const args = process.argv[2]
+if (!args) usageAndExit()
+
 const [
   from,
   toChain,
   toAddress,
   amount,
   gas
-] = process.argv[2].split(',')
+] = args.split(',')
 
-if (!amount) {
-  console.log("Usage:\n\tswap 'from,toChain,toAddress,amount[,gas]'")
-  process.exit(1)
-}
+if (!amount) usageAndExit()
 
 const data = string2bytes32(toChain) + toAddress.substring(2)
 
@@ -50,4 +50,9 @@ function string2bytes32(str) {
   const hex = Buffer.from(str).toString('hex')
   const pad = Array(65 - hex.length).join('0')
   return `0x${pad}${hex}`
+}
+
+function usageAndExit() {
+  console.log("Usage:\n\tswap 'from,toChain,toAddress,amount[,gas]'")
+  process.exit(1)
 }
