@@ -29,10 +29,7 @@ install-deps:
 	@dapp install ATNIO/atn-contracts
 build: clean
 	@dapp build >/dev/null 2>&1
-	@cp out/ATN.abi bin/abi/ATN.json
-	@cp out/Swap.abi bin/abi/Swap.json
-	@cp out/Authority.abi bin/abi/Authority.json
-	@cp out/Swap.abi bin/worker/Swap.abi.json
+	@cp out/Swap.abi worker/Swap.abi.json
 clean:
 	@dapp clean
 test:
@@ -133,8 +130,8 @@ check-authorities:
 # Register swap destination chain
 .PHONY: register-chain check-register
 register-chain:
-	@read -p 'Enter chain id: ' chain_id; \
-	chain_id=0x`./bin/string2bytes32 $$chain_id`; \
+	@read -p 'Enter chain name: ' chain_name; \
+	chain_id=0x`./bin/string2bytes32 $$chain_name`; \
 	seth send \
 		--rpc-host $(ETH_RPC_HOST) \
 		--rpc-port $(ETH_RPC_PORT) \

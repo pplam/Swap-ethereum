@@ -19,11 +19,11 @@ if (!amount) usageAndExit()
 
 const data = string2bytes32(toChain) + toAddress.substring(2)
 
-const atnAbiFile = '../out/ATN.abi'
+const atnAbiFile = '../../out/ATN.abi'
 const atnAbiJson = fs.readFileSync(atnAbiFile)
 const atnAbi = JSON.parse(atnAbiJson)
 
-const swapAbiFile = '../out/Swap.abi'
+const swapAbiFile = '../../out/Swap.abi'
 const swapAbiJson = fs.readFileSync(swapAbiFile)
 const swapAbi = JSON.parse(swapAbiJson)
 
@@ -38,11 +38,12 @@ const swap = new web3.eth.Contract(swapAbi, config.SWAP, {
   from,
   gas: gas || 470000
 })
+console.log(from,data, amount)
 
 atn.methods.transfer(config.SWAP, amount, data)
-  .send().then((res) => {
+  .send({from, gas: 470000}).then((res) => {
     console.log(res)
-    swap.events.allEvents(console.log)
+    // swap.events.allEvents(console.log)
   })
 
 

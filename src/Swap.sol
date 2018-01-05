@@ -136,6 +136,7 @@ contract Swap is DSAuth, ERC223ReceivingContract  {
     auth
     returns (bool)
   {
+    require(canProve(_from_chain, _tx_idx));
     Proof(msg.sender, _from_chain, _tx_idx, _to, _amount);
 
     uint num = addProof(_from_chain, _tx_idx, _to, _amount);
@@ -159,12 +160,24 @@ contract Swap is DSAuth, ERC223ReceivingContract  {
     returns (uint)
   {
     InTx storage inTx = inTxs[_chain][_tx_idx];
-    require(!inTx.provers[msg.sender]);
-    require(!inTx.commited);
+    // require(!inTx.provers[msg.sender]);
+    // require(!inTx.commited);
 
     inTx.proofs[_to][_amount]++;
     inTx.provers[msg.sender] = true;
 
     return inTx.proofs[_to][_amount];
+  }
+
+  function canProve(
+    bytes32 _chain,
+    uint _tx_idx
+  )
+    public
+    view
+    returns (bool)
+  {
+    return !inTxs[_chain][_tx_idx].provers[msg.sender]
+      && !inTxs[_chain][_tx_idx].commited;
   }
 }

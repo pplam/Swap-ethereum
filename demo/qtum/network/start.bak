@@ -1,0 +1,44 @@
+#!/bin/bash
+
+mkdir chain_data && cd chain_data
+
+cat <<EOF > config.mk
+-include ./atn_address
+-include ./swap_address
+-include ./authority_address
+
+prove_sig=\`./bin/func_sig 'prove(bytes32,uint256,address,uint256)'\`
+mint_sig=\`./bin/func_sig 'mint(address,uint256)'\`
+burn_sig=\`./bin/func_sig 'burn(address,uint256)'\`
+
+ETH_GAS=4700000
+ETH_CHAIN_ID=0x000000000000000000000000000000000000000000000000000000007174756d
+SWAP_REQUIRED_PROOF_NUMBER=1
+EOF
+
+dapp testnet > nohup.out 2>&1 &
+
+workdir=`grep 'Database' nohup.out | awk '{print $NF}'`
+echo $workdir
+grep 'Account' nohup.out \
+  | awk '{print $NF}' \
+  | sed 's/\(^.*$\)/ETH_FROM=0x\1/' >> config.mk
+grep 'RPC URL' nohup.out \
+  | awk '{print $NF}' \
+  | sed 's/\(http:\/\/[^:]*\):\(\d*\)/ETH_RPC_HOST=\1;ETH_RPC_PORT=\2/' \
+  | tr ';' '\n' >> config.mk
+
+touch ./password
+
+geth --ipcpath ${workdir}/geth.ipc \
+  --datadir ${workdir} \
+  account new --password ./password \
+  | sed 's/^.*{\([0-9a-fA-F]\{40\}\)}.*$/0x\1/' > account1
+geth --ipcpath ${workdir}/geth.ipc \
+  --datadir ${workdir} \
+  account new --password ./password \
+  | sed 's/^.*{\([0-9a-fA-F]\{40\}\)}.*$/0x\1/' > account2
+geth --ipcpath ${workdir}/geth.ipc \
+  --datadir ${workdir} \
+  account new --password ./password \
+  | sed 's/^.*{\([0-9a-fA-F]\{40\}\)}.*$/0x\1/' > account3

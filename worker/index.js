@@ -11,8 +11,8 @@ class Worker {
     const httpRegex = /^http:\/\//i
     const wsRegex = /^ws:\/\//i
     if (httpRegex.test(opts.endpoint)) {
-      const provider = new Web3.providers.HttpProvider(endpoint)
-      const web3 = new Web3(provider)
+      const provider = new Web3.providers.HttpProvider(opts.endpoint)
+      this.web3 = new Web3(provider)
       // const provider = new Web3.providers.HttpProvider(opts.endpoint)
       // this.web3 = new Web3(provider)
     } else if (wsRegex.test(opts.endpoint)) {
@@ -23,7 +23,7 @@ class Worker {
     //   gas: opts.gas || 400000,
     //   from: opts.account
     // })
-    this.swap = web3.eth.contract(abi).at(opts.swap)
+    this.swap = this.web3.eth.contract(abi).at(opts.swap)
   }
 
   listen() {
@@ -33,8 +33,9 @@ class Worker {
       //   res.from_chain = this.id
       //   resolve(res)
       // })
-      this.swap.SwapTx((e) => {
-        const res = e.returnValue
+      this.swap.SwapTx((err, e) => {
+        if (err) reject(err)
+        const res = e.args
         res.from_chain = this.id
         resolve(res)
       })
@@ -42,6 +43,14 @@ class Worker {
   }
 
   prove(proof) {
+    const commited = this.swap.inTxs(proof.from_chain, proof.tx_idx)
+    console.log(commited)
+    console.log(proof)
+    if (!commited) {
+      console.log(proof.from_chain, proof.tx_idx, proof.to_address, proof.amount)
+      this.swap.prove(proof.from_chain, proof.tx_idx, proof.to_address, proof.amount)
+    }
+    console.log(commited)
     console.log(proof)
   }
 }
