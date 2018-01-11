@@ -1,5 +1,0 @@
-#!/bin/zsh
-
-rm -rf ~/.dapp/testnet/*
-ps -ef | grep geth | awk '{print $2}' | xargs kill
-dapp testnet &

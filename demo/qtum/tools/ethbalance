@@ -1,5 +1,0 @@
-seth ls \
-  --rpc-host localhost \
-  --rpc-port 2000 \
-  -G 470000 \
-  -F 0x4ce169cb2953084d572f2c3cd6c3eb12171b9823

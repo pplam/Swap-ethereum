@@ -7,6 +7,7 @@
     "lib": "lib"
   },
   "scripts": {
+    "listen": "node worker/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

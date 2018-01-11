@@ -223,3 +223,33 @@ can-prove:
 		$(CONTRACT_AUTHORITY) \
 		"canCall(address,address,bytes4)" \
 		$$account $(CONTRACT_SWAP) $(prove_sig)
+
+
+# setup demo
+.PHONY: demo
+demo:
+	@./bin/gen_demo_config \
+		$(ETH_RPC_HOST) $(ETH_RPC_PORT) $(CONTRACT_ATN) $(CONTRACT_SWAP) $(ETH_FROM)
+	@./bin/gen_worker_config \
+		$(CONTRACT_SWAP) $(ETH_FROM) $(ETH_RPC_HOST) $(ETH_RPC_PORT) $(ETH_GAS)
+	@seth send \
+		--rpc-host $(ETH_RPC_HOST) \
+		--rpc-port $(ETH_RPC_PORT) \
+		-G $(ETH_GAS) \
+		-F  $(ETH_FROM) \
+		$(CONTRACT_ATN) \
+		"mint(address,uint256)" \
+		$(ETH_FROM) 1000
+	@seth send \
+		--rpc-host $(ETH_RPC_HOST) \
+		--rpc-port $(ETH_RPC_PORT) \
+		-G $(ETH_GAS) \
+		-F $(ETH_FROM) \
+		$(CONTRACT_SWAP) \
+		"registerChain(bytes32)" \
+		0x`./bin/string2bytes32 qtum`
+	@echo
+	@echo
+	@echo 'Demo is ready to run. Now you have 1000 ATN to play around.'
+	@echo '1. npm run listen'
+	@echo '2. cd demo && ./swap <chainName>,<toAddress>,<amount>[,gas]'

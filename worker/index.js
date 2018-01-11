@@ -33,43 +33,52 @@ class Worker {
       //   res.from_chain = this.id
       //   resolve(res)
       // })
-      this.swap.SwapTx((err, e) => {
-        if (err) reject(err)
-        const res = e.args
-        res.from_chain = this.id
-        resolve(res)
+      const events = this.swap.allEvents()
+      events.watch((err, e) => {
+        if (!err) console.log(err)
+        console.log(e)
       })
+
+      // this.swap.SwapTx((err, e) => {
+      //   if (err) reject(err)
+      //   const res = e.args
+      //   res.from_chain = this.id
+      //   resolve(res)
+      //   console.log(e)
+      // })
     })
   }
 
   prove(proof) {
-    const commited = this.swap.inTxs(proof.from_chain, proof.tx_idx)
-    console.log(commited)
-    console.log(proof)
-    if (!commited) {
-      console.log(proof.from_chain, proof.tx_idx, proof.to_address, proof.amount)
-      this.swap.prove(proof.from_chain, proof.tx_idx, proof.to_address, proof.amount)
-    }
-    console.log(commited)
+    // const commited = this.swap.inTxs(proof.from_chain, proof.tx_idx)
+    // console.log(commited)
+    // console.log(proof)
+    // if (!commited) {
+    //   console.log(proof.from_chain, proof.tx_idx, proof.to_address, proof.amount)
+    //   this.swap.prove(proof.from_chain, proof.tx_idx, proof.to_address, proof.amount)
+    // }
+    // console.log(commited)
     console.log(proof)
   }
 }
 
-const workers = {}
+// const workers = {}
+//
+// function handler(e) {
+//   const toChain = e.to_chain
+//   delete e.toChain
+//
+//   const target = workers[toChain]
+//   target.prove(e)
+// }
+//
+// config.forEach((c) => {
+//   const worker = new Worker(c)
+//   workers[c.id] = worker
+// })
 
-function handler(e) {
-  const toChain = e.to_chain
-  delete e.toChain
-
-  const target = workers[toChain]
-  target.prove(e)
-}
-
-config.forEach((c) => {
-  const worker = new Worker(c)
-  workers[c.id] = worker
-})
-
-Object.getOwnPropertyNames(workers).forEach((id) => {
-  workers[id].listen().then(handler)
-})
+// Object.getOwnPropertyNames(workers).forEach((id) => {
+//   workers[id].listen().then(handler)
+// })
+const worker = new Worker(config)
+worker.listen()

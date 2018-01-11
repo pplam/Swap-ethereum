@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+
+const path = require('path')
+const fs = require('fs')
+const out = path.join(path.dirname(fs.realpathSync(__filename)), '../worker/config.json')
+const args = process.argv.slice(2)
+const config = {
+  id: '0x000000000000000000000000000000000000000000000000657468657265756d',
+  name: 'ethereum',
+  swap: args[0],
+  account: args[1],
+  endpoint: `http://${args[2]}:${args[3]}`,
+  gas: args[4] || 470000
+}
+fs.writeFileSync(out, JSON.stringify(config, null, 2))
