@@ -1,8 +1,8 @@
 {
-  "id": "0x000000000000000000000000000000000000000000000000657468657265756d",
-  "name": "ethereum",
-  "swap": "0xf12b5dd4ead5f743c6baa640b0216200e89b60da",
-  "account": "0x627306090abaB3A6e1400e9345bC60c78a8BEf57",
-  "endpoint": "http://localhost:7545",
-  "gas": "4700000"
+  "id": "",
+  "name": "",
+  "swap": "",
+  "account": "",
+  "endpoint": "",
+  "gas": ""
 }

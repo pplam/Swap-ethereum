@@ -250,6 +250,6 @@ demo:
 		0x`./bin/string2bytes32 qtum`
 	@echo
 	@echo
-	@echo 'Demo is ready to run. Now you have 1000 ATN to play around.'
+	@echo 'Demo is ready to run. Now you have 1000 ATN to play around, you can swap to \'qtum\' in the demo just generated.'
 	@echo '1. npm run listen'
 	@echo '2. cd demo && ./swap <chainName>,<toAddress>,<amount>[,gas]'
