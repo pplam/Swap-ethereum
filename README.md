@@ -2,9 +2,8 @@
 ATN cross chain swap router at ethereum
 ## Installation
 ~~~shell
-git clone https://github.com/ATNIO/Swap-ethereum.git
+git --recursive clone https://github.com/ATNIO/Swap-ethereum.git
 cd Swap-ethereum
-make install-deps
 npm install
 ~~~
 ## Deployment
